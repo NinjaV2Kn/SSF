@@ -1,6 +1,5 @@
 import RPi.GPIO as GPIO
 import time
-import Nanoleaf as nls
 
 # each sensor is a GPIO pin so it can be diffrent(in this case buttons where used).
 sensor1 = 18 # bottle slot 1
@@ -28,7 +27,7 @@ def setup_GPIO() -> None:
         GPIO.setwarnings(False) #Disable warnings
         GPIO.setmode(GPIO.BCM) #Set GPIO pin numbering
         for sensor in all_sensors:
-            GPIO.setup(sensor, GPIO.IN) #Setup GPIO as input
+            GPIO.setup(sensor, GPIO.IN,pull_up_down=GPIO.PUD_DOWN) #Setup GPIO as input
     except Exception as e:
         print(e)
 
