@@ -2,8 +2,6 @@ from flask import Flask, request, redirect, url_for, render_template, session, f
 import os
 import base64
 import time
-#import BottleSensors as bs
-#import Temp_sensor as tp
 import json
 
 app = Flask(__name__)
@@ -45,18 +43,20 @@ def protected():
         with open("bottle_count.json", "r") as file:
             data = json.load(file)
             value = int(data['count'])
+            bottles = int(data['bottles'])
+            temperature = int(data['temp'])
 
         if is_logged_in():
-            sensorSts = 12 #bs.bottle_counter()
+            sensorSts = bottles
             count = value
-            temper = 5 #tp.TempCalc()
+            temper = temperature
             templateData = {
                 'temperature': temper,
                 'title': 'GPIO input Status!',
                 'button': sensorSts,
                 'quantity': count,
             }
-            return render_template("Mate_website.html", **templateData)
+            return render_template("probe.html", **templateData)
         else:
             return redirect(url_for('login'))
     except Exception as e:
@@ -70,8 +70,8 @@ def logout():
     return redirect(url_for('login'))
 
 
-#def start() -> None:
- #   app.run(host="192.168.30.154", port="5010", debug=True)
+def start() -> None:
+   app.run(host="192.168.30.32", port="5010", debug=True)
 
 if __name__ == "__main__":
     app.run()
