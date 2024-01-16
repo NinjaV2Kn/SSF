@@ -1,6 +1,7 @@
 import requests
 import json
 import payLeaf as pl
+import time
 
 def check_and_update_balance(previous_balance) -> float:
     """Check the balance and update the count of bottles sold"""
@@ -42,7 +43,7 @@ def update_bottle_count() -> None:
             count_dict = json.load(file)
             count = int(count_dict['count'])
     except FileNotFoundError:
-        print("FILE NOT FOUND")
+        print("BOTTLE_COUNT FILE NOT FOUND")
         count = 0
     
     # Increment the count
@@ -52,7 +53,29 @@ def update_bottle_count() -> None:
     with open('bottle_count.json', 'w') as file:
         json.dump({"count": count}, file)
     
-    print(f"Bottle sold! Total bottles sold: {count}")
+    print(f"Total bottles sold: {count}")
+
+def soldPrint() -> None:
+    """Prints the total bottles sold"""
+    try:
+        with open('bottle_count.json', 'r') as file:
+            count_dict = json.load(file)
+            count = int(count_dict['count'])
+    except FileNotFoundError:
+        print("BOTTLE_COUNT FILE NOT FOUND")
+        count = None
+    print(f"Total bottles sold: {count}")
+
+def soldIndicator() ->int:
+    """gives you the Number of the sold Bottles"""
+    try:
+        with open('bottle_count.json', 'r') as file:
+            count_dict = json.load(file)
+            count = int(count_dict['count'])
+        return count
+    except Exception as e:
+        print(e)
+
 
 def main() -> None:
     """Main function"""
@@ -64,6 +87,7 @@ def main() -> None:
         while True:
             # Check and update the balance
             previous_balance = check_and_update_balance(previous_balance)
+            time.sleep(10)
     except Exception as e:
         print(e)
 
